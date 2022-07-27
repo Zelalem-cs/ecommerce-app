@@ -1,0 +1,23 @@
+
+.item-description{
+    width: 80%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.item-img{
+    flex: none;
+    align-self: stretch;
+    flex-grow: 1;
+    height: 100%;
+   
+}
+.item-name{
+    font-weight: 100;
+    font-size: 16px;
+    font-family: 'Raleway';
+    color: #1D1F22;
+}
