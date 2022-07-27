@@ -1,0 +1,30 @@
+
+
+.cart-item{
+    gap:10px;
+    width: 100%;
+}
+.item-description{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.item-img{
+    width: 121px;
+    height: 190px;
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 1;
+    margin-bottom: 30px;
+}
+.item-name{
+    font-weight: 100;
+    font-size: 16px;
+    font-family: 'Raleway';
+    color: #1D1F22;
+}
