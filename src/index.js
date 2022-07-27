@@ -1,13 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+import Header from "./layout/header";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+import { store } from "./store/app-store";
+import { Provider } from "react-redux";
+import Container from "./shared/component/container/container";
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <link
+      href="https://fonts.googleapis.com/css?family=Raleway"
+      rel="stylesheet"
+    />
+    <link href='https://fonts.googleapis.com/css?family=Roboto Condensed' rel='stylesheet'/>
+    <Provider store={store}>
+      <BrowserRouter>
+        <div style={{ backgroundColor: "#fffff" }}>
+          <Header />
+          <Container>
+            <App />
+          </Container>
+        </div>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 
