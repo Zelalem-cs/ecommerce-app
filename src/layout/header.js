@@ -195,7 +195,7 @@ class Header extends React.Component {
               </div>
             </div>
           </div>
-          {this.state.showMyBag && (
+          {this.state.showMyBag && this.props.totalQuantity!==0 && (
             <div
               className={`shopping-bag`}
               style={{ height: `${document.body.scrollHeight}px` }}
