@@ -10,37 +10,14 @@ import "./header.css";
 class Header extends React.Component {
   constructor(props) {
     super(props);
-    this.handleClickOutside=this.handleClickOutside.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
     this.state = {
       showMyBag: false,
       showCurrencyDropdown: false,
     };
-    
   }
   ref = React.createRef(null);
   bagRef = React.createRef(null);
-
-   currencyDropDown = (
-    <div className="currency-dropdown" ref={this.ref}>
-      {this.props?.currencies?.data?.currencies?.map((item, idx) => (
-        <div
-          className={`dropdown-item flex justify-between items-center ${
-            this.props.currency.symbol === item.symbol && "active"
-          }`}
-          key={idx}
-          onClick={() => {
-            localStorage.setItem("currency", JSON.stringify(item));
-            this.props.setCurrency(item);
-            this.setState({showCurrencyDropdown:false})
-            this.props.calculateTotal();
-          }}
-        >
-          <div>{item.symbol}</div>
-          <div>{item.label}</div>
-        </div>
-      ))}
-    </div>
-  );
 
   handleClickOutside = (event) => {
     if (this.ref.current && !this.ref.current.contains(event.target)) {
@@ -63,12 +40,20 @@ class Header extends React.Component {
 
   componentDidMount() {
     this.props.getCurrencies().then((response) => {
-     response?.data?.currencies?.length > 0 && localStorage.currency === undefined ? localStorage.setItem("currency", JSON.stringify(response.data?.currencies[0])):this.props.setCurrency(JSON.parse(localStorage.currency));
-     response?.data?.currencies?.length > 0 && localStorage.currency === undefined && this.props.setCurrency(response.data?.currencies[0])});
+      response?.data?.currencies?.length > 0 &&
+      localStorage.currency === undefined
+        ? localStorage.setItem(
+            "currency",
+            JSON.stringify(response.data?.currencies[0])
+          )
+        : this.props.setCurrency(JSON.parse(localStorage.currency));
+      response?.data?.currencies?.length > 0 &&
+        localStorage.currency === undefined &&
+        this.props.setCurrency(response.data?.currencies[0]);
+    });
   }
 
   render() {
-    
     return (
       <>
         <div className="header flex justify-between items-center">
@@ -127,13 +112,12 @@ class Header extends React.Component {
             </svg>
           </div>
           <div className="action flex items-center justify-end">
-            {this.state.showCurrencyDropdown && this.currencyDropDown}
             <div
               className="flex items-center justify-center"
-              style={{ gap: "5px",cursor:'pointer' }}
+              style={{ gap: "5px", cursor: "pointer" }}
               onClick={() => {
                 this.setState({
-                  showCurrencyDropdown: true,
+                  showCurrencyDropdown: !this.state.showCurrencyDropdown,
                 });
               }}
             >
@@ -145,7 +129,7 @@ class Header extends React.Component {
                   height="6"
                   viewBox="0 0 8 4"
                   fill="none"
-                  style={{display:'flex',marginTop:'4px'}}
+                  style={{ display: "flex", marginTop: "4px" }}
                 >
                   <path
                     d="M1 0.5L4 3.5L7 0.5"
@@ -156,9 +140,30 @@ class Header extends React.Component {
                 </svg>
               </div>
             </div>
+            {this.state.showCurrencyDropdown && (
+              <div className="currency-dropdown" ref={this.ref}>
+                {this.props?.currencies?.data?.currencies?.map((item, idx) => (
+                  <div
+                    className={`dropdown-item flex justify-between items-center ${
+                      this.props.currency.symbol === item.symbol && "active"
+                    }`}
+                    key={idx}
+                    onClick={() => {
+                      localStorage.setItem("currency", JSON.stringify(item));
+                      this.props.setCurrency(item);
+                      this.setState({ showCurrencyDropdown: false });
+                      this.props.calculateTotal();
+                    }}
+                  >
+                    <div>{item.symbol}</div>
+                    <div>{item.label}</div>
+                  </div>
+                ))}
+              </div>
+            )}
             <div
               className="flex items-center justify-end"
-              style={{cursor:'pointer'}}
+              style={{ cursor: "pointer" }}
               onClick={() => {
                 this.setState({ showMyBag: !this.state.showMyBag });
               }}
@@ -191,7 +196,10 @@ class Header extends React.Component {
             </div>
           </div>
           {this.state.showMyBag && (
-            <div className={`shopping-bag`}  style={{height:`${document.body.scrollHeight}px`}}>
+            <div
+              className={`shopping-bag`}
+              style={{ height: `${document.body.scrollHeight}px` }}
+            >
               <div className={`drop-down `} ref={this.bagRef}>
                 <div className="title">
                   <div>My Bag</div>{" "}
@@ -244,14 +252,18 @@ class Header extends React.Component {
                       fontWeight: "bold",
                       backgroundColor: "#ffffff",
                       border: "solid gray 1px",
-                      display:'flex',
-                      justifyContent:'center'
+                      display: "flex",
+                      justifyContent: "center",
                     }}
-                    onClick={()=>this.setState({showMyBag:false})}
+                    onClick={() => this.setState({ showMyBag: false })}
                   >
                     <NavLink
                       className="flex items-center justify-end"
-                      style={{ width: "fit-content", height: "100%", border: "none" }}
+                      style={{
+                        width: "fit-content",
+                        height: "100%",
+                        border: "none",
+                      }}
                       to={"/cart"}
                     >
                       VIEW BAG
@@ -284,11 +296,11 @@ const mapStateToProps = (state) => ({
   currencies: productQuery.endpoints.getCurrency.select()(state),
   totalAmount: state.cartSlice.total,
   totalQuantity: state.cartSlice.totalQuantity,
-  currency:state.currencySlice.currency
+  currency: state.currencySlice.currency,
 });
 const mapDispatch = {
   getCurrencies: productQuery.endpoints.getCurrency.initiate,
-  setCurrency:setCurrency,
-  calculateTotal:calculateTotal
+  setCurrency: setCurrency,
+  calculateTotal: calculateTotal,
 };
 export default connect(mapStateToProps, mapDispatch)(Header);
