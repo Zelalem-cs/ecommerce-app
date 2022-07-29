@@ -1,24 +1,37 @@
 import React from "react";
-import { getCategories} from "../../store/query";
-import ProductCard from "../product-card/product-card";
 import { connect } from "react-redux";
+import { Navigate } from "react-router-dom";
+import { setCart } from "../../../../shared/store/slices/cart-slice";
+import { getCategories } from "../../store/product-query";
+import ProductCard from "../product-card/product-card";
 import "./list.css";
-import {setCart} from '../../../../shared/store/slices/cart-slice'
-import { NavLink } from "react-router-dom";
 class List extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { currency:null};
+    this.setCartItem=this.setCartItem.bind(this);
+    this.state = {
+      navigate: null,
+      productSpecification: {
+        selectedAttributes: [],
+      },
+    };
   }
-  
+  setCartItem(product){
+    this.props.setCartItem({
+      ...product,
+      selectedAttributes: [],
+      quantity: 1,
+    });
+  }
   componentDidMount() {
     const { getCategories } = this.props;
     getCategories();
-    this.setState({currency:JSON.parse(localStorage.currency)})
   }
- 
+
   render() {
-    return (
+    return this.state.navigate !== null ? (
+      <Navigate to={this.state.navigate} />
+    ) : (
       <div>
         {this.props.data?.isLoading ? (
           <div
@@ -33,16 +46,38 @@ class List extends React.Component {
               <div className="category-name">{category.name}</div>
               <div className="product-container">
                 {category?.products.map((product, idx) => (
-                  <NavLink key={idx} to={`/detail/${product.id}`}>
+                  <div
+                    key={idx}
+                    onClick={() =>
+                      product.attributes.length > 0
+                        && this.setState({ navigate: `/detail/${product.id}` })
+                    }
+                  >
                     <ProductCard
                       name={`${product.brand} ${product.name}`}
                       url={product.gallery[0]}
-                      sign={product.prices.map((price)=>{if(price.currency.symbol===this.state.currency) return price.currency.symbol; return null} )}
-                      amount={product.prices.map((price)=>{if(price.currency.symbol===this.state.currency) return price.amount; return null} )}
-                      order={(e) => e && this.props.setCartItem(product)}
+                      sign={product.prices.map((price) => {
+                        if (
+                          price.currency.symbol === this.props.currency.symbol
+                        )
+                          return price.currency.symbol;
+                        return null;
+                      })}
+                      amount={product.prices.map((price) => {
+                        if (
+                          price.currency.symbol === this.props.currency.symbol
+                        )
+                          return price.amount;
+                        return null;
+                      })}
+                      order={(e) =>
+                        e && product.attributes.length > 0
+                          ? this.navigate(`/detail/${product.id}`)
+                          : this.setCartItem(product)
+                      }
                       inStock={product.inStock}
                     />
-                  </NavLink>
+                  </div>
                 ))}
               </div>
             </div>
@@ -54,10 +89,11 @@ class List extends React.Component {
 }
 const mapStateToProps = (state) => ({
   data: getCategories.select()(state),
+  currency: state.currencySlice.currency,
 });
 
-const mapDispatch ={
-    getCategories: getCategories.initiate,
-    setCartItem: setCart
-  };
+const mapDispatch = {
+  getCategories: getCategories.initiate,
+  setCartItem: setCart,
+};
 export default connect(mapStateToProps, mapDispatch)(List);

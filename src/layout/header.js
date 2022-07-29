@@ -2,24 +2,29 @@ import React from "react";
 import "./header.css";
 import { connect } from "react-redux";
 import ShoppingCart from "../shared/component/shopping-cart/shopping-cart";
-import { productQuery } from "../features/product/store/query";
+import { productQuery } from "../features/product/store/product-query";
 import { NavLink } from "react-router-dom";
-import { cartSlice } from "../shared/store/slices/cart-slice";
+import { setCurrency } from "../shared/store/slices/currency-slice";
+import { calculateTotal } from "../shared/store/slices/cart-slice";
 
 class Header extends React.Component {
   constructor(props) {
     super(props);
     this.handleClickOutside=this.handleClickOutside.bind(this);
+    this.showBag = this.showBag.bind(this);
     this.state = {
       showMyBag: false,
       showCurrencyDropdown: false,
-      currencyIcon: undefined,
-      currencyLabel: undefined,
     };
     
   }
   ref = React.createRef(null);
   bagRef = React.createRef(null);
+  showBag(){
+    let cart = document.getElementById('cart')
+    cart.style.height = window.screen.height;
+    this.setState({ showMyBag: !this.state.showMyBag });
+  }
   handleClickOutside = (event) => {
     if (this.ref.current && !this.ref.current.contains(event.target)) {
       this.setState({ showCurrencyDropdown: false });
@@ -37,14 +42,9 @@ class Header extends React.Component {
     };
   }
   componentDidMount() {
-    this.props.calculateTotal();
     this.props.getCurrencies().then((response) => {
-      this.setState({
-        currencyIcon: response.data?.currencies[0]?.symbol,
-        currencyLabel: response.data?.currencies[0]?.label,
-      });
-      window.localStorage.setItem("currency", JSON.stringify(response.data.currencies[0]?.symbol));
-    });
+     response?.data?.currencies?.length > 0 && localStorage.currency === undefined ? localStorage.setItem("currency", JSON.stringify(response.data?.currencies[0])):this.props.setCurrency(JSON.parse(localStorage.currency));
+     response?.data?.currencies?.length > 0 && localStorage.currency === undefined && this.props.setCurrency(response.data?.currencies[0])});
   }
   render() {
     const currencyDropDown = (
@@ -52,16 +52,14 @@ class Header extends React.Component {
         {this.props?.currencies?.data?.currencies?.map((item, idx) => (
           <div
             className={`dropdown-item flex justify-between items-center ${
-              this.state.currencyIcon === item.symbol && "active"
+              this.props.currency.symbol === item.symbol && "active"
             }`}
             key={idx}
             onClick={() => {
-              window.localStorage.setItem("currency", JSON.stringify(item.symbol));
-              this.setState({
-                currencyIcon: item.symbol,
-                currencyLabel: item.label,
-                showCurrencyDropdown: false,
-              });
+              localStorage.setItem("currency", JSON.stringify(item));
+              this.props.setCurrency(item);
+              this.setState({showCurrencyDropdown:false})
+              this.props.calculateTotal();
             }}
           >
             <div>{item.symbol}</div>
@@ -138,7 +136,7 @@ class Header extends React.Component {
                 });
               }}
             >
-              <div className="currency-icon">{this.state.currencyIcon}</div>
+              <div className="currency-icon">{this.props.currency.symbol}</div>
               <div className="flex items-end">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -191,7 +189,7 @@ class Header extends React.Component {
             </div>
           </div>
           {this.state.showMyBag && (
-            <div className={`shopping-bag`} id="cart">
+            <div className={`shopping-bag`} id="cart" style={{height:`${document.body.scrollHeight}px`}}>
               <div className={`drop-down `} ref={this.bagRef}>
                 <div className="title">
                   <div>My Bag</div>{" "}
@@ -222,7 +220,7 @@ class Header extends React.Component {
                 >
                   <div>Total</div>
                   <div>
-                    {JSON.parse(window.localStorage.currency)}
+                    {this.props.currency.symbol}
                     {this.props.totalAmount.toFixed(2)}
                   </div>
                 </div>
@@ -282,9 +280,11 @@ const mapStateToProps = (state) => ({
   currencies: productQuery.endpoints.getCurrency.select()(state),
   totalAmount: state.cartSlice.total,
   totalQuantity: state.cartSlice.totalQuantity,
+  currency:state.currencySlice.currency
 });
 const mapDispatch = {
   getCurrencies: productQuery.endpoints.getCurrency.initiate,
-  calculateTotal: cartSlice.actions.calculateTotal,
+  setCurrency:setCurrency,
+  calculateTotal:calculateTotal
 };
 export default connect(mapStateToProps, mapDispatch)(Header);

@@ -1,7 +1,7 @@
 import React from "react";
 import "./shopping-cart.css";
 import { connect } from "react-redux";
-import { cartSlice } from "../../store/slices/cart-slice";
+import {removeProductFromCart, setCart } from "../../store/slices/cart-slice";
 
 class ShoppingCart extends React.Component {
   componentDidMount() {
@@ -31,7 +31,7 @@ class ShoppingCart extends React.Component {
                   >
                     {item.prices.map(
                       (price) =>
-                        price.currency.symbol === localStorage.currency &&
+                        price.currency.symbol === this.props.currency.symbol &&
                         `${price.currency.symbol} ${price.amount}`
                     )}
                   </div>
@@ -208,9 +208,10 @@ class ShoppingCart extends React.Component {
 }
 const mapStateToProps = (state) => ({
   cartItem: state.cartSlice.product,
+  currency:state.currencySlice.currency
 });
 const mapDispatch = {
-  removeCartItem: cartSlice.actions.removeProductFromCart,
-  setCartItem: cartSlice.actions.setCart,
+  removeCartItem: removeProductFromCart,
+  setCartItem: setCart,
 };
 export default connect(mapStateToProps, mapDispatch)(ShoppingCart);

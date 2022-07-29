@@ -16,6 +16,7 @@ export const productQuery = appApi.injectEndpoints({
                 gallery
                 prices{
                   currency{
+                    label
                     symbol
                   }
                   amount
