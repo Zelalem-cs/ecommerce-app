@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { setCart } from "../../../../shared/store/slices/cart-slice";
 import { withRouter } from "../../../../shared/utility/url-param";
-import { getProduct } from "../../store/query";
+import { getProduct } from "../../store/product-query";
 class ProductDetail extends Component {
   constructor(props) {
     super(props);
@@ -235,7 +235,7 @@ class ProductDetail extends Component {
               {this.props.product?.data?.product?.prices.map((price) => {
                 if (
                   price.currency.symbol ===
-                  JSON.parse(window.localStorage.currency)
+                  this.props.currency.symbol
                 )
                   return `${price.currency.symbol} ${price.amount}`;
                 return null;
@@ -305,5 +305,6 @@ const mapDispatch = {
 const mapStateToProps = (state, props) => ({
   product: getProduct.select(props.params.id)(state),
   loading: state.cartSlice.loading,
+  currency:state.currencySlice.currency
 });
 export default withRouter(connect(mapStateToProps, mapDispatch)(ProductDetail));

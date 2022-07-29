@@ -1,12 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  product: [],
-  total: 0,
-  totalQuantity: 0,
+  product: localStorage.cartItem ? JSON.parse(localStorage?.cartItem) : [],
+  total: localStorage.total ? parseFloat(localStorage.total) : 0,
+  totalQuantity: localStorage.totalQuantity ? parseInt(localStorage.totalQuantity) : 0,
   loading: false,
 };
-
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -18,12 +17,12 @@ export const cartSlice = createSlice({
         (state.product = state.product.map((product) => {
           if (product.id === action.payload.id) {
             if (
-              JSON.stringify(product.selectedAttributes) ===
+              action.payload.attributes === [] || JSON.stringify(product.selectedAttributes) ===
               JSON.stringify(action.payload.selectedAttributes)
             ) {
               setState = true;
               action.payload?.prices?.forEach((price) => {
-                if (price.currency.symbol === JSON.parse(localStorage.currency)) {
+                if (JSON.stringify(price.currency) === localStorage.currency) {
                   state.total += price.amount;
                 }
               });
@@ -38,12 +37,15 @@ export const cartSlice = createSlice({
 
       !setState &&
         action.payload?.prices?.forEach((price) => {
-          if (price.currency.symbol === JSON.parse(localStorage.currency)) {
+          if (JSON.stringify(price.currency) === localStorage.currency) {
             state.total += price.amount;
           }
         });
       !setState && (state.totalQuantity += 1);
       state.loading = false;
+      localStorage.setItem('cartItem',JSON.stringify(state.product))
+      localStorage.setItem('total',state.total)
+      localStorage.setItem('totalQuantity',state.totalQuantity)
     },
     updateProductAttributeInCart: (state, action) => {
       state.product = state.product.map((product) => {
@@ -67,7 +69,7 @@ export const cartSlice = createSlice({
           return product;
         });
         action.payload.prices.forEach((price) => {
-          if (price.currency.symbol === JSON.parse(localStorage.currency)) {
+          if (JSON.stringify(price.currency)=== localStorage.currency) {
             console.log("price", price.amount);
             state.total -= price.amount;
             state.totalQuantity -= 1;
@@ -81,7 +83,7 @@ export const cartSlice = createSlice({
               JSON.stringify(action.payload.selectedAttributes)
             ) {
               product.prices.forEach((price) => {
-                if (price.currency.symbol === JSON.parse(localStorage.currency)) {
+                if (JSON.stringify(price.currency) === localStorage.currency) {
                   console.log("price", price.amount);
                   state.total -= price.amount;
                   state.totalQuantity -= 1;
@@ -97,15 +99,24 @@ export const cartSlice = createSlice({
               JSON.stringify(action.payload.selectedAttributes)
         );
       }
+      localStorage.setItem('cartItem',JSON.stringify(state.product))
+      localStorage.setItem('total',state.total)
+      localStorage.setItem('totalQuantity',state.totalQuantity)
     },
     calculateTotal: (state) => {
+      state.total=0
       state.product.forEach((item) =>
         item.prices.forEach((price) => {
-          if (price.currency.symbol === JSON.parse(localStorage.currency))
+          if (JSON.stringify(price.currency) === localStorage.currency)
             state.total += price.amount;
         })
       );
     },
+    reset:(state)=>{
+      state.product=[];
+      state.total=0;
+      state.totalQuantity=0;
+    }
   },
 });
 
@@ -113,6 +124,7 @@ export const cartSlice = createSlice({
 export const selectProduct = (state) => state.product;
 export const {
   setCart,
+  reset,
   removeProductFromCart,
   calculateTotal,
   updateProductAttributeInCart,
