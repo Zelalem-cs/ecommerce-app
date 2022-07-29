@@ -1,17 +1,16 @@
 import React from "react";
-import "./header.css";
 import { connect } from "react-redux";
-import ShoppingCart from "../shared/component/shopping-cart/shopping-cart";
-import { productQuery } from "../features/product/store/product-query";
 import { NavLink } from "react-router-dom";
-import { setCurrency } from "../shared/store/slices/currency-slice";
+import ShoppingCart from "../features/product/component/shopping-cart/shopping-cart";
+import { productQuery } from "../features/product/store/product-query";
 import { calculateTotal } from "../shared/store/slices/cart-slice";
+import { setCurrency } from "../shared/store/slices/currency-slice";
+import "./header.css";
 
 class Header extends React.Component {
   constructor(props) {
     super(props);
     this.handleClickOutside=this.handleClickOutside.bind(this);
-    this.showBag = this.showBag.bind(this);
     this.state = {
       showMyBag: false,
       showCurrencyDropdown: false,
@@ -20,11 +19,29 @@ class Header extends React.Component {
   }
   ref = React.createRef(null);
   bagRef = React.createRef(null);
-  showBag(){
-    let cart = document.getElementById('cart')
-    cart.style.height = window.screen.height;
-    this.setState({ showMyBag: !this.state.showMyBag });
-  }
+
+   currencyDropDown = (
+    <div className="currency-dropdown" ref={this.ref}>
+      {this.props?.currencies?.data?.currencies?.map((item, idx) => (
+        <div
+          className={`dropdown-item flex justify-between items-center ${
+            this.props.currency.symbol === item.symbol && "active"
+          }`}
+          key={idx}
+          onClick={() => {
+            localStorage.setItem("currency", JSON.stringify(item));
+            this.props.setCurrency(item);
+            this.setState({showCurrencyDropdown:false})
+            this.props.calculateTotal();
+          }}
+        >
+          <div>{item.symbol}</div>
+          <div>{item.label}</div>
+        </div>
+      ))}
+    </div>
+  );
+
   handleClickOutside = (event) => {
     if (this.ref.current && !this.ref.current.contains(event.target)) {
       this.setState({ showCurrencyDropdown: false });
@@ -33,41 +50,25 @@ class Header extends React.Component {
       this.setState({ showMyBag: false });
     }
   };
+
   componentDidUpdate() {
     document.addEventListener("click", this.handleClickOutside, true);
   }
+
   componentWillUnmount() {
     return () => {
       document.removeEventListener("click", this.handleClickOutside, true);
     };
   }
+
   componentDidMount() {
     this.props.getCurrencies().then((response) => {
      response?.data?.currencies?.length > 0 && localStorage.currency === undefined ? localStorage.setItem("currency", JSON.stringify(response.data?.currencies[0])):this.props.setCurrency(JSON.parse(localStorage.currency));
      response?.data?.currencies?.length > 0 && localStorage.currency === undefined && this.props.setCurrency(response.data?.currencies[0])});
   }
+
   render() {
-    const currencyDropDown = (
-      <div className="currency-dropdown" ref={this.ref}>
-        {this.props?.currencies?.data?.currencies?.map((item, idx) => (
-          <div
-            className={`dropdown-item flex justify-between items-center ${
-              this.props.currency.symbol === item.symbol && "active"
-            }`}
-            key={idx}
-            onClick={() => {
-              localStorage.setItem("currency", JSON.stringify(item));
-              this.props.setCurrency(item);
-              this.setState({showCurrencyDropdown:false})
-              this.props.calculateTotal();
-            }}
-          >
-            <div>{item.symbol}</div>
-            <div>{item.label}</div>
-          </div>
-        ))}
-      </div>
-    );
+    
     return (
       <>
         <div className="header flex justify-between items-center">
@@ -126,10 +127,10 @@ class Header extends React.Component {
             </svg>
           </div>
           <div className="action flex items-center justify-end">
-            {this.state.showCurrencyDropdown && currencyDropDown}
+            {this.state.showCurrencyDropdown && this.currencyDropDown}
             <div
-              className="action-item flex items-center justify-center"
-              style={{ gap: "5px" }}
+              className="flex items-center justify-center"
+              style={{ gap: "5px",cursor:'pointer' }}
               onClick={() => {
                 this.setState({
                   showCurrencyDropdown: !this.state.showCurrencyDropdown,
@@ -156,7 +157,8 @@ class Header extends React.Component {
               </div>
             </div>
             <div
-              className="action-item flex items-center justify-end"
+              className="flex items-center justify-end"
+              style={{cursor:'pointer'}}
               onClick={() => {
                 this.setState({ showMyBag: !this.state.showMyBag });
               }}
@@ -189,7 +191,7 @@ class Header extends React.Component {
             </div>
           </div>
           {this.state.showMyBag && (
-            <div className={`shopping-bag`} id="cart" style={{height:`${document.body.scrollHeight}px`}}>
+            <div className={`shopping-bag`}  style={{height:`${document.body.scrollHeight}px`}}>
               <div className={`drop-down `} ref={this.bagRef}>
                 <div className="title">
                   <div>My Bag</div>{" "}
@@ -241,13 +243,15 @@ class Header extends React.Component {
                       fontSize: "14px",
                       fontWeight: "bold",
                       backgroundColor: "#ffffff",
-                      borderWidth: "1px",
-                      borderColor: "gray",
+                      border: "solid gray 1px",
+                      display:'flex',
+                      justifyContent:'center'
                     }}
+                    onClick={()=>this.setState({showMyBag:false})}
                   >
                     <NavLink
-                      className="flex items-center justify-center"
-                      style={{ width: "100%", height: "100%", border: "none" }}
+                      className="flex items-center justify-end"
+                      style={{ width: "fit-content", height: "100%", border: "none" }}
                       to={"/cart"}
                     >
                       VIEW BAG
