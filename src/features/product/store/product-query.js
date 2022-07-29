@@ -1,5 +1,5 @@
+import { gql } from 'graphql-request';
 import { appApi } from "../../../store/app-api";
-import { gql } from 'graphql-request'
 export const productQuery = appApi.injectEndpoints({
     endpoints: (builder) => ({
       getCategories: builder.query({
@@ -22,6 +22,7 @@ export const productQuery = appApi.injectEndpoints({
                   amount
                 }
                 attributes{
+                  type
                   name
                   items{
                     displayValue

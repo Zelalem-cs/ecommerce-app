@@ -55,15 +55,16 @@
 .card>.order-icon{
     visibility: hidden;
     position: absolute;
-    bottom:70px;
+    bottom:68px;
     right:30px;
     border-radius:100%;
-    width: 40px;
-    height: 40px;
+    width: 52px;
+    height: 52px;
     background-color: #5ECE7B;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: #1D1F22;
 }
 .card:hover .order-icon{
     visibility: visible;

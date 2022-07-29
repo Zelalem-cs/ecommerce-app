@@ -1,12 +1,12 @@
 import React from "react";
-import "./cart-detail.css";
 import { connect } from "react-redux";
+import { NavLink } from "react-router-dom";
 import {
   removeProductFromCart,
   reset,
-  setCart,
+  setCart
 } from "../../../../shared/store/slices/cart-slice";
-import { NavLink } from "react-router-dom";
+import "./cart-detail.css";
 
 class CartDetail extends React.Component {
   constructor(props) {
@@ -26,9 +26,9 @@ class CartDetail extends React.Component {
     localStorage.removeItem("total");
     localStorage.removeItem("totalQuantity");
     this.props.resetCartState();
-    this.setState({purchase:true})
+    this.setState({ purchase: true });
   }
-   purchase = (
+  purchase = (
     <div
       style={{
         height: "100%",
@@ -44,9 +44,9 @@ class CartDetail extends React.Component {
           flexDirection: "column",
           alignItems: "center",
           height: "200px",
-          width:'300px',
+          width: "300px",
           border: "solid #5ECE7B 1px",
-          borderRadius:'4px'
+          borderRadius: "4px",
         }}
       >
         <div
@@ -55,74 +55,76 @@ class CartDetail extends React.Component {
             display: "flex",
             justifyContent: "end",
             alignItems: "center",
-            padding:'2px'
+            paddingTop: "4px",
           }}
         >
-          <NavLink to='/'><svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="icon icon-tabler icon-tabler-x"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            strokeWidth="1"
-            stroke="currentColor"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg></NavLink>
+          <NavLink to="/">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="icon icon-tabler icon-tabler-x"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              strokeWidth="1"
+              stroke="currentColor"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </NavLink>
         </div>
-       <div style={{
-            display:'flex',
-            flexDirection:'column',
-            justifyContent:'center',
-            alignItems:'center',
-            width:'100%',
-            height:'100%',
-            gap:'20px'
-          }}>
-       <div
+        <div
           style={{
-            height: "70px",
-            width: "70px",
-            borderRadius: "100%",
-            backgroundColor: "#5ECE7B",
-            color:'white',
-            display:'flex',
-            justifyContent:'center',
-            alignItems:'center',
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+            gap: "20px",
           }}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="icon icon-tabler icon-tabler-check"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            strokeWidth="1"
-            stroke="currentColor"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          <div
+            style={{
+              height: "70px",
+              width: "70px",
+              borderRadius: "100%",
+              backgroundColor: "#5ECE7B",
+              color: "white",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-            <path d="M5 12l5 5l10 -10"></path>
-          </svg>
-          
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="icon icon-tabler icon-tabler-check"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              strokeWidth="1"
+              stroke="currentColor"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M5 12l5 5l10 -10"></path>
+            </svg>
+          </div>
+          <div style={{ fontSize: "24px", color: "#1D1F22" }}>Thank You !</div>
         </div>
-        <div style={{fontSize:'24px',color:'#1D1F22'}}>Thank You !</div>
-       </div>
-        
       </div>
     </div>
   );
   render() {
-
-    return (
-      this.state.purchase ? this.purchase :
+    return this.state.purchase ? (
+      this.purchase
+    ) : (
       <div
         style={{
           display: "flex",
@@ -227,7 +229,7 @@ class CartDetail extends React.Component {
                               className="flex items-center "
                             >
                               {attribute.items.map((attributeItem, idx) =>
-                                attribute.name === "Color" ? (
+                                attribute.type === "swatch" ? (
                                   <div
                                     key={idx}
                                     style={{
@@ -461,29 +463,44 @@ class CartDetail extends React.Component {
           style={{
             marginTop: "32px",
             display: "flex",
-            flexDirection: "column",
             gap: "8px",
             fontFamily: "Raleway",
           }}
         >
           <div
-            style={{ fontWeight: "400", fontSize: "24px", lineHeight: "28px" }}
+            style={{ fontWeight: "400", fontSize: "24px", lineHeight: "28px",display:'flex',flexDirection:'column',gap:'5px' }}
           >
-            Tax 21%: {`${(this.props.totalFee * 0.21).toFixed(2)}`}
+            <div>Tax 21%:</div>
+            <div>Quantity:</div>
+            <div style={{
+                fontWeight: "bold",
+                fontSize: "24px",
+                color: "#1D1F22",
+                lineHeight: "28px",
+              }}>Total:</div>
           </div>
           <div
-            style={{ fontWeight: "400", fontSize: "24px", lineHeight: "28px" }}
-          >{`Quantity: ${this.props.totalQuantity}`}</div>
-          <div
             style={{
-              fontWeight: "500",
+              fontWeight: "bold",
               fontSize: "24px",
               color: "#1D1F22",
               lineHeight: "28px",
+              display:'flex',
+              flexDirection:'column',
+              gap:'5px'
             }}
           >
-            Total:{" "}
-            {`${(this.props.totalFee + this.props.totalFee * 0.21).toFixed(2)}`}
+            <div>
+              {this.props.currency.symbol}
+              {`${(this.props.totalFee * 0.21).toFixed(2)}`}
+            </div>
+            <div>{`${this.props.totalQuantity}`}</div>
+            <div>
+              {this.props.currency.symbol}
+              {`${(this.props.totalFee + this.props.totalFee * 0.21).toFixed(
+                2
+              )}`}
+            </div>
           </div>
         </div>
         <div style={{ marginTop: "16px" }}>

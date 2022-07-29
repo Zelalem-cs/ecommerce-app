@@ -49,7 +49,7 @@ class List extends React.Component {
                   <div
                     key={idx}
                     onClick={() =>
-                      product.attributes.length > 0
+                       product.inStock
                         && this.setState({ navigate: `/detail/${product.id}` })
                     }
                   >
@@ -70,9 +70,9 @@ class List extends React.Component {
                           return price.amount;
                         return null;
                       })}
-                      order={(e) =>
-                        e && product.attributes.length > 0
-                          ? this.navigate(`/detail/${product.id}`)
+                      order={() =>
+                           product.attributes.length > 0
+                          ? this.setState({ navigate: `/detail/${product.id}` })
                           : this.setCartItem(product)
                       }
                       inStock={product.inStock}

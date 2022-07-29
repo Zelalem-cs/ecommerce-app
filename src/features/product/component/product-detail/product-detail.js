@@ -94,11 +94,14 @@ class ProductDetail extends Component {
           <div
             style={{
               fontSize: "30px",
-              fontWeight: "",
             }}
           >
+            <div  style={{
+              fontSize: "30px",
+              fontWeight: "bold",
+            }}>{this.props.product?.data?.product?.brand}</div>
             {this.props.product?.data?.product?.name}
-            {this.props.product?.data?.product?.brand}
+            
           </div>
           {this.props.product?.data?.product.attributes.map(
             (attribute, index) => {
@@ -128,7 +131,7 @@ class ProductDetail extends Component {
                       className="flex items-center "
                     >
                       {attribute.items.map((attributeItem, idx) =>
-                        attribute.name === "Color" ? (
+                        attribute.type === "swatch" ? (
                           <div
                             key={idx}
                             style={{
