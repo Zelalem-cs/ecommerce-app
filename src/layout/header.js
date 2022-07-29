@@ -133,7 +133,7 @@ class Header extends React.Component {
               style={{ gap: "5px",cursor:'pointer' }}
               onClick={() => {
                 this.setState({
-                  showCurrencyDropdown: !this.state.showCurrencyDropdown,
+                  showCurrencyDropdown: true,
                 });
               }}
             >
