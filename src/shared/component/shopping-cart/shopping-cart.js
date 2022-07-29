@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { removeProductFromCart, setCart } from "../../../../shared/store/slices/cart-slice";
+import { removeProductFromCart, setCart } from "../../store/slices/cart-slice";
 import "./shopping-cart.css";
 
 class ShoppingCart extends React.Component {

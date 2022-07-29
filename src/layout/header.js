@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
-import ShoppingCart from "../features/product/component/shopping-cart/shopping-cart";
 import { productQuery } from "../features/product/store/product-query";
+import ShoppingCart from "../shared/component/shopping-cart/shopping-cart";
 import { calculateTotal } from "../shared/store/slices/cart-slice";
 import { setCurrency } from "../shared/store/slices/currency-slice";
 import "./header.css";
