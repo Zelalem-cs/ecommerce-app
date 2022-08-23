@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { setCart } from "../../../../shared/store/slices/cart-slice";
 import { withRouter } from "../../../../shared/utility/url-param";
 import { getProduct } from "../../store/product-query";
+import "./product-detail.css";
 class ProductDetail extends Component {
   constructor(props) {
     super(props);
@@ -40,10 +41,8 @@ class ProductDetail extends Component {
     });
   }
   componentDidMount() {
-    const { getProduct } = this.props;
-    getProduct(this.props.params.id).then((response) => {
-      document.getElementById("description").innerHTML =
-        response.data?.product?.description;
+    const { getProduct,params } = this.props;
+    getProduct(params.id).then((response) => {
       this.setState({
         currentImg: response.data?.product.gallery[0],
         productSpecification: {
@@ -59,15 +58,12 @@ class ProductDetail extends Component {
     });
   }
   render() {
+    const { product, loading, currency, setCartItem } = this.props;
     return (
-      <div style={{ display: "flex", gap: "30px" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          {this.props.product?.data?.product?.gallery?.map((image, idx) => (
-            <div
-              key={idx}
-              style={{ padding: "2px", cursor: "pointer" }}
-              onClick={() => this.setState({ currentImg: image })}
-            >
+      <div className="product-detail">
+        <div className="img-list">
+          {product?.data?.product?.gallery?.map((image, idx) => (
+            <div key={idx} onClick={() => this.setState({ currentImg: image })}>
               <img src={image} width={100} height={100} alt="img" />
             </div>
           ))}
@@ -77,124 +73,49 @@ class ProductDetail extends Component {
             width: "700px",
             height: "450px",
             backgroundImage: `url(${this.state.currentImg})`,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-            backgroundSize: "cover",
           }}
+          className="img-preview"
         ></div>
-        <div
-          style={{
-            width: "300px",
-            fontFamily: "Raleway",
-            display: "flex",
-            flexDirection: "column",
-            gap: "30px",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "30px",
-            }}
-          >
-            <div  style={{
-              fontSize: "30px",
-              fontWeight: "bold",
-            }}>{this.props.product?.data?.product?.brand}</div>
-            {this.props.product?.data?.product?.name}
-            
+        <div className="product-detail-description">
+          <div className="product-description-name">
+            <div className="brand"> {product?.data?.product?.brand}</div>
+            <div> {product?.data?.product?.name}</div>
           </div>
-          {this.props.product?.data?.product.attributes.map(
-            (attribute, index) => {
-              return (
-                <div style={{ width: "100%" }} key={index}>
-                  <div
-                    style={{
-                      width: "100%",
-                      gap: "10px",
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <div style={{ width: "100%" }}>
-                      <div
-                        style={{
-                          fontSize: "18px",
-                          fontFamily: "Roboto Condensed",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {attribute.name}
-                      </div>
+
+          {product?.data?.product.attributes.map((attribute, index) => {
+            return (
+              <div style={{ width: "100%" }} key={index}>
+                <div className="product-detail-attribute">
+                  <div style={{ width: "100%" }}>
+                    <div className="product-detail-attribute-name">
+                      {attribute.name}
                     </div>
-                    <div
-                      style={{ width: "100%", gap: "5px" }}
-                      className="flex items-center "
-                    >
-                      {attribute.items.map((attributeItem, idx) =>
-                        attribute.type === "swatch" ? (
+                  </div>
+                  <div className="product-detail-attribute-value flex items-center ">
+                    {attribute.items.map((attributeItem, idx) =>
+                      attribute.type === "swatch" ? (
+                        <div
+                          key={idx}
+                          className="swatch-attribute"
+                          style={{
+                            border:
+                              this.state.productSpecification.selectedAttributes.some(
+                                (attr) =>
+                                  attr.name === attribute.name &&
+                                  attr.value === attributeItem.value
+                              ) && "solid 1px #5ECE7B",
+                            padding:
+                              this.state.productSpecification.selectedAttributes.some(
+                                (attr) =>
+                                  attr.name === attribute.name &&
+                                  attr.value === attributeItem.value
+                              ) && "2px",
+                          }}
+                        >
                           <div
                             key={idx}
                             style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              border:
-                                this.state.productSpecification.selectedAttributes.some(
-                                  (attr) =>
-                                    attr.name === attribute.name &&
-                                    attr.value === attributeItem.value
-                                ) && "solid 1px #5ECE7B",
-                              padding:
-                                this.state.productSpecification.selectedAttributes.some(
-                                  (attr) =>
-                                    attr.name === attribute.name &&
-                                    attr.value === attributeItem.value
-                                ) && "2px",
-                            }}
-                          >
-                            <div
-                              key={idx}
-                              style={{
-                                width: "30px",
-                                height: "30px",
-                                backgroundColor: attributeItem.value,
-                              }}
-                              onClick={() =>
-                                this.setAttribute({
-                                  name: attribute.name,
-                                  value: attributeItem.value,
-                                })
-                              }
-                            ></div>
-                          </div>
-                        ) : (
-                          <div
-                            key={idx}
-                            className="flex items-center justify-center"
-                            style={{
-                              border: "solid 1px",
-                              width: "fit-content",
-                              height: "fit-content",
-                              padding: "14px",
-                              fontFamily: "Source Sans Pro",
-                              fontStyle: "normal",
-                              fontSize: "12px",
-                              fontWeight: "400",
-                              backgroundColor:
-                                this.state.productSpecification.selectedAttributes.some(
-                                  (attr) =>
-                                    attr.name === attribute.name &&
-                                    attr.value === attributeItem.value
-                                )
-                                  ? "black"
-                                  : "",
-                              color:
-                                this.state.productSpecification.selectedAttributes.some(
-                                  (attr) =>
-                                    attr.name === attribute.name &&
-                                    attr.value === attributeItem.value
-                                )
-                                  ? "white"
-                                  : "#1D1F22",
+                              backgroundColor: attributeItem.value,
                             }}
                             onClick={() =>
                               this.setAttribute({
@@ -202,69 +123,62 @@ class ProductDetail extends Component {
                                 value: attributeItem.value,
                               })
                             }
-                          >
-                            {attributeItem.value}
-                          </div>
-                        )
-                      )}
-                    </div>
+                          ></div>
+                        </div>
+                      ) : (
+                        <div
+                          key={idx}
+                          className="text-attribute flex items-center justify-center"
+                          style={{
+                            backgroundColor:
+                              this.state.productSpecification.selectedAttributes.some(
+                                (attr) =>
+                                  attr.name === attribute.name &&
+                                  attr.value === attributeItem.value
+                              )
+                                ? "black"
+                                : "",
+                            color:
+                              this.state.productSpecification.selectedAttributes.some(
+                                (attr) =>
+                                  attr.name === attribute.name &&
+                                  attr.value === attributeItem.value
+                              )
+                                ? "white"
+                                : "#1D1F22",
+                          }}
+                          onClick={() =>
+                            this.setAttribute({
+                              name: attribute.name,
+                              value: attributeItem.value,
+                            })
+                          }
+                        >
+                          {attributeItem.value}
+                        </div>
+                      )
+                    )}
                   </div>
                 </div>
-              );
-            }
-          )}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "10px",
-            }}
-          >
-            <div
-              style={{
-                fontSize: "18px",
-                fontFamily: "Roboto Condensed",
-                fontWeight: "bold",
-              }}
-            >
-              PRICE:
-            </div>
-            <div
-              style={{
-                fontSize: "24px",
-                fontWeight: "bold",
-              }}
-            >
-              {this.props.product?.data?.product?.prices.map((price) => {
-                if (
-                  price.currency.symbol ===
-                  this.props.currency.symbol
-                )
+              </div>
+            );
+          })}
+          <div className="product-price-container">
+            <div className="title">PRICE:</div>
+            <div className="value">
+              {product?.data?.product?.prices.map((price) => {
+                if (price.currency.symbol === currency.symbol)
                   return `${price.currency.symbol} ${price.amount}`;
                 return null;
               })}
             </div>
           </div>
           <button
-            style={{
-              width: "100%",
-              height: "43px",
-              fontSize: "14px",
-              fontWeight: "bold",
-              backgroundColor: "#5ECE7B",
-              color: "#ffffff",
-              border: "none",
-              cursor: "pointer",
-              display: "flex",
-              gap: "8px",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onClick={() =>
-              this.props.setCartItem(this.state.productSpecification)
-            }
+            className="cart-button"
+            disabled={!product?.data?.product?.inStock}
+            onClick={() => setCartItem(this.state.productSpecification)}
           >
-            {this.props.loading && (
+            {loading && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 style={{ display: "block", shapeRendering: " auto" }}
@@ -295,7 +209,11 @@ class ProductDetail extends Component {
             )}
             ADD TO CART
           </button>
-          <div id="description"></div>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: product?.data?.product?.description,
+            }}
+          ></div>
         </div>
       </div>
     );
@@ -308,6 +226,6 @@ const mapDispatch = {
 const mapStateToProps = (state, props) => ({
   product: getProduct.select(props.params.id)(state),
   loading: state.cartSlice.loading,
-  currency:state.currencySlice.currency
+  currency: state.currencySlice.currency,
 });
 export default withRouter(connect(mapStateToProps, mapDispatch)(ProductDetail));

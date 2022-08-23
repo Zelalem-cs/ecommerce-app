@@ -70,7 +70,6 @@ export const cartSlice = createSlice({
         });
         action.payload.prices.forEach((price) => {
           if (JSON.stringify(price.currency)=== localStorage.currency) {
-            console.log("price", price.amount);
             state.total -= price.amount;
             state.totalQuantity -= 1;
           }
@@ -84,7 +83,6 @@ export const cartSlice = createSlice({
             ) {
               product.prices.forEach((price) => {
                 if (JSON.stringify(price.currency) === localStorage.currency) {
-                  console.log("price", price.amount);
                   state.total -= price.amount;
                   state.totalQuantity -= 1;
                 }

@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
-import reportWebVitals from "./reportWebVitals";
-import Header from "./layout/header";
+import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import { store } from "./store/app-store";
-import { Provider } from "react-redux";
+import "./index.css";
+import Header from "./layout/header";
+import reportWebVitals from "./reportWebVitals";
 import Container from "./shared/component/container/container";
+import { store } from "./store/app-store";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -18,7 +18,7 @@ root.render(
     <link href='https://fonts.googleapis.com/css?family=Roboto Condensed' rel='stylesheet'/>
     <Provider store={store}>
       <BrowserRouter>
-        <div style={{ backgroundColor: "#fffff" }}>
+        <div style={{ backgroundColor: "#FFFFFF" }}>
           <Header />
           <Container>
             <App />

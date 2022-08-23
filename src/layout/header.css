@@ -1,121 +1,170 @@
-.header{
-    height: 80px;
-    padding: 0 80px 0 80px;
+.header {
+  height: 80px;
+  padding: 0 80px 0 80px;
+  position: sticky;
+  top:0;
+  background-color: #FFFFFF;
+  z-index: 20;
 }
 
-.navigation{
-    gap:15px;
-    height:100%;
-    width:fit-content
+.navigation {
+  gap: 15px;
+  height: 100%;
+  width: fit-content;
 }
-.nav-item,a{
-    cursor: pointer;
-    text-transform: uppercase;
-    height:100%;
-    width: fit-content;
-    padding: 0 10px 0 10px;
-    font-family: 'Raleway';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 120%;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    color: #1D1F22;
-    text-decoration: none;
+.nav-item,
+a {
+  cursor: pointer;
+  text-transform: uppercase;
+  height: 100%;
+  width: fit-content;
+  padding: 0 10px 0 10px;
+  font-family: "Raleway";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 120%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  color: #1d1f22;
+  text-decoration: none;
 }
-.nav-item.active ,.nav-item:hover{
-    border-bottom:solid 2px;
-    border-color: '#5ECE7B';
-    color: #5ECE7B;
+.nav-item.active,
+.nav-item:hover {
+  border-bottom: solid 2px;
+  border-color: "#5ECE7B";
+  color: #5ece7b;
 }
-.action{
-    gap:20px;
-    width: 204px;
-    position: relative;
+.action {
+  right: 0;
+  gap: 20px;
+  width: 204px;
 }
 
-.cart-icon{
-    position: relative;
+.cart-icon {
+  position: relative;
 }
-.cart-icon>.item-num{
-    position: absolute;
-    top: -7px;
-    right:-11px;
-    height: 15px;
-    width: 19px;
-    border-radius: 100%;
-    background-color: #1D1F22;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
+.cart-icon > .item-num {
+  position: absolute;
+  top: -7px;
+  right: -11px;
+  height: 15px;
+  width: 19px;
+  border-radius: 100%;
+  background-color: #1d1f22;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
 }
-.currency-dropdown{
-    width: 100px;
-    height: fit-content;
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    top: 40px;
-    background-color: #FFFFFF;
+.currency-dropdown {
+  width: 100px;
+  height: fit-content;
+  position: absolute;
+  bottom: 0;
+  top: 40px;
+  background-color: #ffffff;
 }
-.currency-icon{
-    font-size: 25px;
+.currency-icon {
+  font-size: 20px;
 }
-.dropdown-item{
-    height: 30px;
-    width: 100%;
-    padding: 8px;
-    
+.dropdown-item {
+  width: 100%;
+  padding: 8px;
+  font-weight: 500;
+  font-size: 18px;
+  gap: 5px;
+  line-height: 28px;
 }
-.dropdown-item.active{
-    background-color: #EEEEEE;
+.dropdown-item.active {
+  background-color: #eeeeee;
 }
-.dropdown-item:hover{
-    background-color: #EEEEEE;
+.dropdown-item:hover {
+  background-color: #eeeeee;
 }
-.shopping-bag{
-    font-family: 'Raleway';
-    font-style: normal;
-    position: absolute;
-    top: 88px;
-    background: rgba(57, 55, 72, 0.22);
-    z-index: 5;
-    left: 0;
-    right: 0;
-    width:100%;
+.shopping-bag {
+  font-family: "Raleway";
+  font-style: normal;
+  position: absolute;
+  top: 80px;
+  background: rgba(57, 55, 72, 0.22);
+  z-index: 5;
+  left: 0;
+  width: 100%;
+  height: 100vh;
 }
-.drop-down>.title>div{
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 160%;
-    text-align: left;
-    color: #1D1F22;
+.shopping-bag-item-container {
+  display: flex;
+  max-width: 325px;
+  max-height: 60vh;
+  flex-direction: column;
+  margin-top: 10px;
+  overflow-y: auto;
 }
-.drop-down>.title>span{
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 160%;
-    color: #1D1F22;
+.total-price {
+  width: 100%;
+  font-weight: bolder;
+  font-size: 18px;
+  color: #1d1f22;
+  margin-top: 10px;
 }
-.drop-down{
-    font-family: 'Raleway';
-    font-style: normal;
-    padding: 32px 16px;
-    position: absolute;
-    width: 300px;
-    right: 50px;
-    background: #FFFFFF;
-    z-index: 10;
+.button-container {
+  width: 100%;
+  font-weight: bolder;
+  font-size: 20px;
+  gap: 20px;
+  margin-top: 20px;
 }
-.title{
-    width: 100%;
-    justify-content: flex-start;
-    align-items: center;
-    display: flex;
-    gap: 10px;
-    padding: 2;
+.button-container > .view-button {
+  width: 50%;
+  height: 43px;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #ffffff;
+  border: solid  1px gray;
+  display: flex;
+  justify-content: center;
+}
+.button-container > .check-out-button {
+  width: 50%;
+  height: 43px;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #5ece7b;
+  color: #ffffff;
+  border: none;
+}
+.drop-down > .title > div {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 160%;
+  text-align: left;
+  color: #1d1f22;
+}
+.drop-down > .title > span {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 160%;
+  color: #1d1f22;
+}
+.drop-down {
+  font-family: "Raleway";
+  font-style: normal;
+  padding: 16px 16px;
+  position: absolute;
+  width: 300px;
+  max-height: 100vh;
+  right: 50px;
+  background: #ffffff;
+  z-index: 10;
+}
+.title {
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  padding: 2;
 }

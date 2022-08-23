@@ -1,82 +1,98 @@
-import { gql } from 'graphql-request';
+import { gql } from "graphql-request";
 import { appApi } from "../../../store/app-api";
 export const productQuery = appApi.injectEndpoints({
-    endpoints: (builder) => ({
-      getCategories: builder.query({
-        query: () => ({
-          body: gql`
-          query {
-            categories{
+  endpoints: (builder) => ({
+    getProduct: builder.query({
+      query: (id) => ({
+        body: gql`
+          query getProduct($id: String!) {
+            product(id: $id) {
+              id
               name
-              products{
+              brand
+              inStock
+              gallery
+              description
+              prices {
+                currency {
+                  label
+                  symbol
+                }
+                amount
+              }
+              attributes {
+                name
+                type
+                items {
+                  displayValue
+                  value
+                }
+              }
+            }
+          }
+        `,
+        variables: { id: id },
+      }),
+    }),
+    getCategory: builder.query({
+      query: (input) => ({
+        body: gql`
+          query getCategory($input: CategoryInput!) {
+            category(input: $input) {
+              name
+              products {
                 id
                 name
                 brand
                 inStock
                 gallery
-                prices{
-                  currency{
+                description
+                prices {
+                  currency {
                     label
                     symbol
                   }
                   amount
                 }
-                attributes{
-                  type
+                attributes {
                   name
-                  items{
+                  type
+                  items {
                     displayValue
                     value
                   }
                 }
               }
             }
-            }
-          `,
-        }),
+          }
+        `,
+        variables:{input:{title:input }},
       }),
-      getProduct: builder.query({
-        query:(id) => ({
-          body:gql`query getProduct($id:String!){
-            product(id:$id){
-              id
-              name
-              brand
-              gallery
-              description
-              prices{
-                currency{
-                  label
-                  symbol
-                }
-                amount
-              }
-              attributes{
-                name
-                type
-                items{
-                  displayValue
-                  value
-                }
-              }
-            }
-          }`,
-          variables:{id:id}
-        }),
-        
-      }),
-      getCurrency: builder.query({
-        query: () => ({
-          body: gql`
-          query getCurrency{
-            currencies{
+    }),
+    getCurrency: builder.query({
+      query: () => ({
+        body: gql`
+          query getCurrency {
+            currencies {
               label
               symbol
             }
           }
-          `,
-        }),
+        `,
       }),
     }),
-  });
-export const {getCategories,getCurrency,getProduct} = productQuery.endpoints
+    getCategories: builder.query({
+      query: () => ({
+        body: gql`
+        query {
+          categories{
+            name
+          }
+          }
+        `,
+      }),
+    }),
+  }),
+});
+export const { getCategories, getCurrency, getProduct, getCategory } =
+  productQuery.endpoints;
