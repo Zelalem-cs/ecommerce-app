@@ -1,23 +1,213 @@
+.cart-item-description {
+  width: 80%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.item-img-container {
+  flex: none;
+  align-self: stretch;
+  flex-grow: 1;
+  height: 100%;
+}
 
-.item-description{
-    width: 80%;
-    height: fit-content;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
+.success-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.item-img{
-    flex: none;
-    align-self: stretch;
-    flex-grow: 1;
-    height: 100%;
-   
+.success-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 200px;
+  width: 300px;
+  border: solid #5ECE7B 1px;
+  border-radius: 4px;
 }
-.item-name{
-    font-weight: 100;
-    font-size: 16px;
-    font-family: 'Raleway';
-    color: #1D1F22;
+.success-close-icon {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 4px;
+}
+.success-text-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  gap: 20px;
+}
+.success-icon {
+  height: 70px;
+  width: 70px;
+  border-radius: 100%;
+  background-color: #5ece7b;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.success-text {
+  font-size: 24px;
+  color: #1d1f22;
+}
+.cart-container {
+  display: flex;
+  flex-direction: column;
+  color: #1d1f22;
+  font-family: "Raleway";
+}
+.cart-title {
+  font-weight: 700;
+  font-size: 32px;
+  margin-bottom: 55px;
+  text-transform: uppercase;
+}
+.cart-item {
+  width: 100%;
+  height: 100%;
+  border-top: solid #E5E5E5 1px;
+  border-bottom: solid #E5E5E5 1px;
+  padding: 24px 0 24px 0;
+}
+.item-name {
+  width: 100%;
+  gap: 5px;
+  flex-direction: column;
+}
+.item-name> .name {
+  font-size: 30px;
+  font-family: "Raleway";
+  color: #1d1f22;
+}
+
+.item-name > .brand {
+  font-weight: 600;
+  font-size: 30px;
+  font-family: "Raleway";
+  color: #1d1f22;
+}
+.item-price{
+  display: flex;
+  justify-items: left;
+  width: 100%;
+}
+.item-price>div {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 25px;
+}
+.items-container {
+  width: 100%;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-attribute-name>p {
+  width: 100%;
+  font-weight: bold;
+  font-size: 18px;
+  font-family: "Roboto Condensed";
+  text-transform: uppercase;
+  padding: 0;
+  margin: 0;
+}
+.item-attribute-value-container {
+  width: 100%;
+  gap: 5px;
+}
+
+.item-attribute-value {
+  border: solid 1.7px;
+  width: fit-content;
+  padding: 14px;
+  height: fit-content;
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-size: 16px;
+  font-weight: 400;
+}
+.item-container{
+  display: flex;
+  flex-direction: column;
+  gap:5px;
+}
+.cart-action-button {
+  border: solid thin;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 24px;
+}
+.item-img {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  position: relative;
+}
+.img-arrow-container {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  gap: 5px;
+}
+.img-arrow {
+  background-color: rgba(0, 0, 0, 0.73);
+  padding: 2px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+.cart-report {
+  margin-top: 32px;
+  display: flex;
+  gap: 8px;
+  font-family: "Raleway";
+}
+.cart-report-key {
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.cart-total-price {
+  font-weight: bold;
+  font-size: 24px;
+  color: #1d1f22;
+  line-height: 28px;
+}
+.cart-report-value {
+  font-weight: bold;
+  font-size: 24px;
+  color: #1d1f22;
+  line-height: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.order-button {
+  width: 279px;
+  height: 43px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #5ece7b;
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
 }
