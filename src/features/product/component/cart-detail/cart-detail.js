@@ -100,7 +100,7 @@ class CartDetail extends React.Component {
                     {item.prices.map(
                       (price) =>
                         price.currency.symbol === currency.symbol &&
-                        `${price.currency.symbol}${price.amount}`
+                        `${price.currency.symbol}${price.amount.toFixed(2)}`
                     )}
                   </div>
                 </div>
@@ -108,7 +108,7 @@ class CartDetail extends React.Component {
                 <div className="items-container">
                   {item.attributes.map((attribute, index) => {
                     return (
-                      <div className="item-container" key={index}>
+                      <div className="item-attribute-container" key={index}>
                         <div className="item-attribute-name">
                           <p>{attribute.name}:</p>
                         </div>
@@ -117,9 +117,8 @@ class CartDetail extends React.Component {
                             attribute.type === "swatch" ? (
                               <div
                                 key={idx}
+                                className='flex justify-center'
                                 style={{
-                                  display: "flex",
-                                  justifyContent: "center",
                                   border:
                                     item.selectedAttributes.some(
                                       (attr) =>
@@ -135,9 +134,8 @@ class CartDetail extends React.Component {
                                 }}
                               >
                                 <div
+                                className="color-box"
                                   style={{
-                                    width: "32px",
-                                    height: "32px",
                                     backgroundColor: attributeItem.value,
                                   }}
                                 ></div>
@@ -173,18 +171,12 @@ class CartDetail extends React.Component {
                     );
                   })}
                 </div>
-
-                {/* <div style={{ width: "100%" }}>
-                     
-                    </div> */}
               </div>
               <div
-                style={{ gap: "10px", width: "30%" }}
-                className="flex justify-end"
+                className="item-preview"
               >
                 <div
-                  style={{ height: "100%", flexDirection: "column" }}
-                  className="flex  justify-between"
+                  className="cart-action-container"
                 >
                   <div
                     className="cart-action-button flex items-center justify-center"
@@ -312,7 +304,7 @@ class CartDetail extends React.Component {
             </div>
           </div>
         </div>
-        <div style={{ marginTop: "16px" }}>
+        <div  >
           <button className="order-button" onClick={() => this.order(cartItem)}>
             ORDER
           </button>

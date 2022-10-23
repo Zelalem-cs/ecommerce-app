@@ -13,10 +13,16 @@
   padding: 2px;
   cursor: pointer;
 }
+.img-box {
+  position: relative;
+}
 .img-preview {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+  width: 700px;
+  height: 450px;
+  position: relative;
 }
 .product-detail-description {
   width: 300px;
@@ -91,4 +97,22 @@
   gap: 8px;
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+.overlay {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ffffff;
+  z-index: 2;
+  cursor: pointer;
+  opacity: 0.5;
+  color: #8d8f9a;
+}
+.svg-loading {
+  display: "block";
+  shape-rendering: " auto";
 }

@@ -1,3 +1,4 @@
+import DOMPurify from "dompurify";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { setCart } from "../../../../shared/store/slices/cart-slice";
@@ -63,19 +64,22 @@ class ProductDetail extends Component {
       <div className="product-detail">
         <div className="img-list">
           {product?.data?.product?.gallery?.map((image, idx) => (
-            <div key={idx} onClick={() => this.setState({ currentImg: image })}>
+            <div className="img-box" key={idx} onClick={() => this.setState({ currentImg: image })}>
+              {!product?.data?.product?.inStock && <div className="overlay flex justify-center items-center">
+            OUT OF STOCK
+          </div>}
               <img src={image} width={100} height={100} alt="img" />
             </div>
           ))}
         </div>
         <div
-          style={{
-            width: "700px",
-            height: "450px",
+          style={{ 
             backgroundImage: `url(${this.state.currentImg})`,
           }}
           className="img-preview"
-        ></div>
+        > {!product?.data?.product?.inStock && <div className="overlay flex justify-center items-center">
+        OUT OF STOCK
+      </div>}</div>
         <div className="product-detail-description">
           <div className="product-description-name">
             <div className="brand"> {product?.data?.product?.brand}</div>
@@ -84,9 +88,9 @@ class ProductDetail extends Component {
 
           {product?.data?.product.attributes.map((attribute, index) => {
             return (
-              <div style={{ width: "100%" }} key={index}>
+              <div className="w-full" key={index}>
                 <div className="product-detail-attribute">
-                  <div style={{ width: "100%" }}>
+                  <div className="w-full">
                     <div className="product-detail-attribute-name">
                       {attribute.name}
                     </div>
@@ -168,7 +172,7 @@ class ProductDetail extends Component {
             <div className="value">
               {product?.data?.product?.prices.map((price) => {
                 if (price.currency.symbol === currency.symbol)
-                  return `${price.currency.symbol} ${price.amount}`;
+                  return `${price.currency.symbol} ${price.amount.toFixed(2)}`;
                 return null;
               })}
             </div>
@@ -181,7 +185,7 @@ class ProductDetail extends Component {
             {loading && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                style={{ display: "block", shapeRendering: " auto" }}
+                className="svg-loading"
                 width="20px"
                 height="20px"
                 viewBox="0 0 100 100"
@@ -207,11 +211,14 @@ class ProductDetail extends Component {
                 </circle>
               </svg>
             )}
+            {!product?.data?.product?.inStock && <div className="overlay flex justify-center items-center">
+       
+      </div>}
             ADD TO CART
           </button>
           <div
             dangerouslySetInnerHTML={{
-              __html: product?.data?.product?.description,
+              __html:DOMPurify.sanitize(product?.data?.product?.description),
             }}
           ></div>
         </div>

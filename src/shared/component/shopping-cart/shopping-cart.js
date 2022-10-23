@@ -22,20 +22,19 @@ class ShoppingCart extends React.Component {
                   {item.prices.map(
                     (price) =>
                       price.currency.symbol === currency.symbol &&
-                      `${price.currency.symbol} ${price.amount}`
+                      `${price.currency.symbol} ${price.amount.toFixed(2)}`
                   )}
                 </div>
 
                 <div className="item-attribute-container">
                   {item.attributes.map((attribute, index) => {
                     return (
-                      <div style={{ width: "100%" }} key={index}>
+                      <div className="w-full" key={index}>
                         <div className="cart-item-attribute-value">
                           <div>{attribute.name}:</div>
 
                           <div
-                            style={{ width: "100%", gap: "5px" }}
-                            className="flex items-center "
+                            className="item-attribute"
                           >
                             {attribute.items.map((attributeItem, idx) =>
                               attribute.type === "swatch" ? (
@@ -59,9 +58,9 @@ class ShoppingCart extends React.Component {
                                 >
                                   <div
                                     key={idx}
+                                    className='color-box'
                                     style={{
-                                      width: "16px",
-                                      height: "16px",
+                                      
                                       backgroundColor: attributeItem.value,
                                     }}
                                     onClick={() =>
@@ -111,10 +110,9 @@ class ShoppingCart extends React.Component {
                   })}
                 </div>
               </div>
-              <div style={{ gap: "5px" }} className="flex">
+              <div  className="item-container">
                 <div
-                  style={{ height: "100%", flexDirection: "column" }}
-                  className="flex  justify-between"
+                  className=" item-container-action"
                 >
                   <div
                     className="action-button flex items-center justify-center"
