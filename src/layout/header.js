@@ -15,6 +15,7 @@ class Header extends React.Component {
     this.state = {
       showMyBag: false,
       showCurrencyDropdown: false,
+      activeMenu:null
     };
   }
   ref = React.createRef(null);
@@ -28,8 +29,13 @@ class Header extends React.Component {
       this.setState({ showMyBag: false });
     }
   };
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     document.addEventListener("click", this.handleClickOutside, true);
+    if (prevProps.location !== this.props.location){
+       if(this.props.categories.data.categories.some(e => e.name === this.props.location.pathname.slice(this.props.location.pathname.indexOf('/')+1)))
+           this.setState({activeMenu:this.props.location.pathname})
+    }
+      
   }
 
   componentWillUnmount() {
@@ -41,6 +47,7 @@ class Header extends React.Component {
   componentDidMount() {
     const { getNavCategories, getCurrencies, setCurrency } = this.props;
     getNavCategories();
+    this.setState({activeMenu:this.props.location.pathname})
     getCurrencies().then((response) => {
       response?.data?.currencies?.length > 0 &&
       localStorage.currency === undefined
@@ -71,7 +78,7 @@ class Header extends React.Component {
         <div className="header flex justify-between items-center">
           <div className="navigation flex justify-center items-center">
             {categories?.data?.categories?.map((category, idx) => (
-              <NavLink to={`${category.name}`} className={`nav-item`} key={idx}>
+              <NavLink to={`${category.name}`} className={`${this.state.activeMenu === `/${category.name}` && 'active'} nav-item`} key={idx}>
                 {category?.name}
               </NavLink>
             ))}
@@ -127,8 +134,7 @@ class Header extends React.Component {
           </div>
           <div className="action flex items-center justify-end">
             <div
-              className="flex items-center justify-center"
-              style={{ gap: "5px", cursor: "pointer" }}
+              className=" currency-container"
               onClick={() => {
                 this.setState({
                   showCurrencyDropdown: !this.state.showCurrencyDropdown,
@@ -159,7 +165,7 @@ class Header extends React.Component {
                     height="6"
                     viewBox="0 0 8 4"
                     fill="none"
-                    style={{ display: "flex", marginTop: "4px" }}
+                   className="flex"
                   >
                     <path
                       d="M1 0.5L4 3.5L7 0.5"
@@ -175,8 +181,8 @@ class Header extends React.Component {
               <div className="currency-dropdown" ref={this.ref}>
                 {currencies?.data?.currencies?.map((item, idx) => (
                   <div
-                    className={`dropdown-item flex items-center justify-center ${
-                      currency.symbol === item.symbol && "active"
+                    className={`dropdown-item flex items-center ${
+                      currency.symbol === item.symbol && "active-currency"
                     }`}
                     key={idx}
                     onClick={() => {
@@ -186,15 +192,14 @@ class Header extends React.Component {
                       calculateTotal();
                     }}
                   >
-                    <div>{item.symbol}</div>
+                    <div className="currency-symbol">{item.symbol}</div>
                     <div>{item.label}</div>
                   </div>
                 ))}
               </div>
             )}
             <div
-              className="flex items-center justify-end"
-              style={{ cursor: "pointer" }}
+              className="flex cursor-pointer items-center justify-end"
               onClick={() => {
                 this.setState({ showMyBag: !this.state.showMyBag });
               }}

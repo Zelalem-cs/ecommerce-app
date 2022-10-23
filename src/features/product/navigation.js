@@ -25,7 +25,7 @@ class ProductNavigation extends React.Component {
             element={<Navigate replace to={`${this.state.navigate}`} />}
           />
         )}
-        <Route index path="/:id" element={<ProductListPage />} />
+        <Route index path=":id" element={<ProductListPage />} />
         <Route path="detail/:id" element={<ProductDetailPage />} />
         <Route path="cart" element={<Cart />} />
       </Routes>

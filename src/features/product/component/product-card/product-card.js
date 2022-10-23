@@ -1,12 +1,23 @@
 import React from "react";
+import { Navigate } from "react-router-dom";
 import "./product-card.css";
 class ProductCard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      navigate: null,
+    };
+  }
   render() {
-    const { url, name, sign, amount, order, inStock } = this.props;
-    return (
+    const { url, name, sign, amount, order, inStock,id } = this.props;
+    return  this.state.navigate !== null ? (
+      <Navigate to={this.state.navigate} />
+    ) : (
       <div className={`card ${!inStock && "disabled"}`}>
         {!inStock && (
-          <div className="overlay flex justify-center items-center">
+          <div onClick={() =>
+            this.setState({ navigate: `/detail/${id}` })
+        } className="overlay flex justify-center items-center">
             OUT OF STOCK
           </div>
         )}
@@ -36,10 +47,12 @@ class ProductCard extends React.Component {
         )}
         <div
           className="img"
-          style={{
-            backgroundImage: `url(${url})`,
-          }}
-        ></div>
+          onClick={() =>
+              this.setState({ navigate: `/detail/${id}` })
+          }
+        >
+          <img className="card-img" src={url} alt=""/>
+        </div>
         <div className="product-name">{name}</div>
         <div className="product-cost">
           {sign}

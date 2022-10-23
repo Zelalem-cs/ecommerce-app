@@ -14,21 +14,22 @@
 }
 
 .overlay {
-    position: absolute; /* Sit on top of the page content */
-    width: 100%; /* Full width (cover the whole page) */
-    height: 100%; /* Full height (cover the whole page) */
+    position: absolute; 
+    width: 100%; 
+    height: 100%; 
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color:#FFFFFF; /* Black background with opacity */
-    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
-    cursor: pointer; /* Add a pointer on hover */
+    background-color:#FFFFFF; 
+    z-index: 2; 
+    cursor: pointer;
     opacity: 0.5;
     color: #8D8F9A;
   }
 
 .product-name{
+    margin-top: 14px;
     font-weight: 300;
     font-size: 18px;
     line-height: 160%;
@@ -53,6 +54,7 @@
 .card>.order-icon{
     visibility: hidden;
     position: absolute;
+    z-index: 1;
     bottom:68px;
     right:30px;
     border-radius:100%;
@@ -68,12 +70,14 @@
     visibility: visible;
 }
 .card:hover{
-    box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
+    box-shadow: 0px 4px 35px rgba(31, 32, 32, 0.116);
 }
 .img{
     background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
+    background-position: center;      
+}
+.card-img{
     height: 330px;
-    width: 300px;
+    width: 354px;
+    object-fit:contain;
 }

@@ -9,6 +9,7 @@ import "./list.css";
 class List extends React.Component {
   constructor(props) {
     super(props);
+    this.ref = React.createRef(null);
     this.setCartItem = this.setCartItem.bind(this);
     this.state = {
       navigate: null,
@@ -17,6 +18,7 @@ class List extends React.Component {
       },
     };
   }
+ 
   setCartItem(product) {
     this.props.setCartItem({
       ...product,
@@ -42,8 +44,8 @@ class List extends React.Component {
       <div>
         {data?.isLoading ? (
           <div
-            style={{ height: "100%" }}
-            className="flex items-center justify-center"
+            
+            className="flex items-center justify-center loading-container"
           >
             <img src="assets/icons/loading-spin.svg" alt="loading..." />
           </div>
@@ -54,11 +56,11 @@ class List extends React.Component {
               {data?.data?.category?.products.map((product, idx) => (
                 <div
                   key={idx}
-                  onClick={() =>
-                    this.setState({ navigate: `/detail/${product.id}` })
-                  }
+                  
                 >
                   <ProductCard
+                  id={product.id}
+                   ref={this.ref}
                     name={`${product.brand} ${product.name}`}
                     url={product.gallery[0]}
                     sign={product.prices.map((price) => {
@@ -68,7 +70,7 @@ class List extends React.Component {
                     })}
                     amount={product.prices.map((price) => {
                       if (price.currency.symbol === currency.symbol)
-                        return price.amount;
+                        return price.amount.toFixed(2);
                       return null;
                     })}
                     order={() =>
